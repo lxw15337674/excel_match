@@ -9,11 +9,17 @@ def match(seg_list, b):
     max_match = 0  # 最大匹配度
     index = 0  # 记录循环的位置
     Matching = 0  # 匹配度
+    # print(seg_list)
     for tar in b:
         # print(tar)
         Matching_degree = 0  # 匹配个数
         for seg in seg_list:
-            match = re.search(seg, tar)
+            match = 0
+            try:
+                match = re.search(seg, tar)
+            except:
+                print(match,seg,tar)
+                # return 0, "报错", Matching
             if match:
                 Matching_degree += 1
         if max_match < Matching_degree:
@@ -23,6 +29,8 @@ def match(seg_list, b):
             # print("匹配个数：%d" % Matching_degree)
             # print("需要匹配分词的数量%d" % len(seg_list))
             Matching = str(Matching_degree*100/len(seg_list)).split('.')[0]
+        if Matching == 0:
+            return 0," ",Matching
         index += 1
     # print("匹配位置: %d" % (result_index + 1))
     # print(result)
