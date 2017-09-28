@@ -1,4 +1,5 @@
 import xlrd, xlwt, jieba
+from xlutils.copy import copy
 from datetime import date, datetime
 import match
 
@@ -28,12 +29,62 @@ def read_bemathch_data(c=0, d=0, bematch_sheet_num=0):
         bmlist.append(value)
     print("被匹配数据读入完成")
     return bmlist
+
+
+def set_style(name, height, bold=False):
+    style = xlwt.XFStyle()  # 初始化样式
+
+    font = xlwt.Font()  # 为样式创建字体
+    font.name = name
+    font.bold = bold
+    font.color_index = 4
+    font.height = height
+
+    style.font = font
+    return style
+
+
+def write_data(ril, rl, wbr, write_col, rml, match_sheet_num=0):
+    # 创建工作簿
+    # workbook = xlwt.Workbook(r'demo.xlsx')
+
+    r_xls = xlrd.open_workbook(r'demo.xls', formatting_info=True)
+    w_xls = copy(r_xls)
+    w_sheet = w_xls.get_sheet(0)
+
+    # 创建sheet
+    # w_sheet = workbook.add_sheet(u'sheet1', cell_overwrite_ok=True)
+
+    w_sheet.write(wbr-2, write_col, '匹配位置', set_style('Times New Roman', 220, True))
+    w_sheet.write(wbr-2, write_col + 1, '匹配事项', set_style('Times New Roman', 220, True))
+    w_sheet.write(wbr-2, write_col + 2, '匹配度', set_style('Times New Roman', 220, True))
+    # 生成第一行和第二行
+    for i in range(len(ril)):
+        w_sheet.write(i + wbr - 1, write_col, ril[i] + wbr - 1, set_style('Times New Roman', 220, True))
+        w_sheet.write(i + wbr - 1, write_col + 1, rl[i], set_style('Times New Roman', 220, True))
+        w_sheet.write(i + wbr - 1, write_col + 2, '%s %%' % rml[i], set_style('Times New Roman', 220, True))
+        # 保存文件
+    w_xls.save('demo3.xls')
+
+
 if __name__ == '__main__':
-    mlist = read_match_data(4, 2)
-    bmlist= read_bemathch_data(4, 2)
+    mrbr = 4  # match_read_begin_rows
+    mrc = 2  # match_read_cols
+    bmrbr = 4  # bematch_read_begin_rows
+    bmrc = 2  # bematch_read_cols
+    write_col = 4
+    ril = []  # result_index_list
+    rl = []  # result_list
+    rml = []  # result_matching_list
+    mlist = read_match_data(mrbr, mrc)
+    bmlist = read_bemathch_data(bmrbr, bmrc)
+    success_num = 0
     for a in mlist:
         # print(a)
-        match.match(a,bmlist)
-
-
-
+        result_index, result, matching = match.match(a, bmlist)
+        ril.append(result_index)
+        rl.append(result)
+        rml.append(matching)
+        success_num += 1
+        print("已成功匹配%s个" % success_num)
+    write_data(ril, rl, mrbr, write_col, rml)
