@@ -51,18 +51,23 @@ def write_data(ril, rl, wbr, write_col, rml, match_sheet_num=0):
     r_xls = xlrd.open_workbook(r'demo.xls', formatting_info=True)
     w_xls = copy(r_xls)
     w_sheet = w_xls.get_sheet(0)
+    style = xlwt.easyxf('font: bold on')
+    redstyle = xlwt.easyxf('font: color-index red, bold on')
 
     # 创建sheet
     # w_sheet = workbook.add_sheet(u'sheet1', cell_overwrite_ok=True)
 
-    w_sheet.write(wbr-2, write_col, '匹配位置', set_style('Times New Roman', 220, True))
-    w_sheet.write(wbr-2, write_col + 1, '匹配事项', set_style('Times New Roman', 220, True))
-    w_sheet.write(wbr-2, write_col + 2, '匹配度', set_style('Times New Roman', 220, True))
+    w_sheet.write(wbr - 2, write_col, '匹配位置', style)
+    w_sheet.write(wbr - 2, write_col + 1, '匹配事项', style)
+    w_sheet.write(wbr - 2, write_col + 2, '匹配度', style)
     # 生成第一行和第二行
     for i in range(len(ril)):
-        w_sheet.write(i + wbr - 1, write_col, ril[i] + wbr - 1, set_style('Times New Roman', 220, True))
-        w_sheet.write(i + wbr - 1, write_col + 1, rl[i], set_style('Times New Roman', 220, True))
-        w_sheet.write(i + wbr - 1, write_col + 2, '%s %%' % rml[i], set_style('Times New Roman', 220, True))
+        w_sheet.write(i + wbr - 1, write_col, ril[i] + wbr - 1, style)
+        w_sheet.write(i + wbr - 1, write_col + 1, rl[i], style)
+        if (int(rml[i])<50):
+            w_sheet.write(i + wbr - 1, write_col + 2, '%s %%' % rml[i], redstyle)
+        else:
+            w_sheet.write(i + wbr - 1, write_col + 2, '%s %%' % rml[i], style)
         # 保存文件
     w_xls.save('demo3.xls')
 

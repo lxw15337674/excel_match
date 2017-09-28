@@ -20,11 +20,11 @@ def match(seg_list, b):
             max_match = Matching_degree
             result = tar
             result_index = index
-            print("匹配个数：%d" % Matching_degree)
-            print("需要匹配分词的数量%d" % len(seg_list))
+            # print("匹配个数：%d" % Matching_degree)
+            # print("需要匹配分词的数量%d" % len(seg_list))
             Matching = str(Matching_degree*100/len(seg_list)).split('.')[0]
         index += 1
     # print("匹配位置: %d" % (result_index + 1))
     # print(result)
-    print("匹配度：%s %%" % Matching)
+    # print("匹配度：%s %%" % Matching)
     return result_index + 1, result,Matching
