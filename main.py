@@ -62,7 +62,7 @@ def write_data(ril, rl, wbr, write_col, rml, match_sheet_num=0):
         w_sheet.write(wbr - 2, write_col + 1, '匹配事项', style)
         w_sheet.write(wbr - 2, write_col + 2, '匹配度', style)
     except:
-        print("有问题")
+        print("从第一行开始没有提示标题" )
     # 写入
     for i in range(len(ril)):
         w_sheet.write(i + wbr - 1,write_col,ril[i] + wbr - 1,style)
