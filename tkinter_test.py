@@ -5,24 +5,17 @@ class Application(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master)
         self.pack()
-        self.create_widgets()
+        self.entrythingy = tk.Entry()
+        self.entrythingy.pack()
+        self.contents = tk.StringVar()
+        self.contents.set("this is a variable")
+        self.entrythingy["textvariable"] = self.contents
+        self.entrythingy.bind('<Key-Return>',
+                              self.print_contents)
 
-    def create_widgets(self):
-        self.hi_there = tk.Button(self)
-        self.hi_there["text"] = "hello world"
-        self.hi_there["command"] = self.say_hi
-        self.hi_there.pack(side="top")
-
-        self.lol = tk.Button(self)
-        self.lol["text"] = "test"
-        self.lol.pack()
-
-        self.quit = tk.Button(self, text="QUit", fg="red",
-                              command=root.destroy)
-        self.quit.pack(side="bottom")
-
-    def say_hi(self):
-        print("fuck there")
+    def print_contents(self, event):
+        print("hi. contents of entry is now ---->",
+              self.contents.get())
 
 
 root = tk.Tk()
